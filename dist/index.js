@@ -26994,16 +26994,23 @@ class Parser {
 ;// CONCATENATED MODULE: ./src/writer.ts
 
 function write(outFile, ouList) {
-    // Format current date into "YYYY-MM-DD HH:MM:SS"
-    const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    // Format current date into "DD.MM.YYYY HH:MM:SS"
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const dateString = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
     // Header
     let formatString = `ZenGin Archive
 ver 1
 zCArchiverGeneric
 ASCII
 saveGame 0
-date ${date}
-user output-unit-action
+date ${dateString}
+user https://github.com/szapp/output-unit-action
 END
 objects ${ouList.size * 3 + 1}
 END
@@ -27029,8 +27036,9 @@ name=string:${key}.WAV
 `;
         index++;
     }
+    formatString += '[]\n';
     // Write to disk
-    external_fs_default().writeFileSync(outFile, formatString, 'ascii');
+    external_fs_default().writeFileSync(outFile, formatString);
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts

@@ -16,9 +16,9 @@ The content of the file should be in the following format:
 ```yaml
 name: ou
 
-# Trigger workflow on push events with changes in SRC or D files
+# Trigger workflow manually
 on:
-  workflow-dispatch:
+  workflow_dispatch:
 
 # The checkout action needs to be run first
 jobs:

@@ -8,6 +8,7 @@ describe('write', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    jest.useFakeTimers().setSystemTime(new Date('2024-12-31 23:58:59'))
   })
 
   it('writes the correct format to the output file', () => {
@@ -19,14 +20,13 @@ describe('write', () => {
 
     write(outFile, ouList)
 
-    const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
     const expectedFormatString = `ZenGin Archive
 ver 1
 zCArchiverGeneric
 ASCII
 saveGame 0
-date ${date}
-user output-unit-action
+date 31.12.2024 23:58:59
+user https://github.com/szapp/output-unit-action
 END
 objects 7
 END
@@ -57,9 +57,10 @@ name=string:key2.WAV
 []
 []
 []
+[]
 `
 
-    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'ascii')
+    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString)
   })
 
   it('writes an empty list correctly', () => {
@@ -68,22 +69,22 @@ name=string:key2.WAV
 
     write(outFile, ouList)
 
-    const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
     const expectedFormatString = `ZenGin Archive
 ver 1
 zCArchiverGeneric
 ASCII
 saveGame 0
-date ${date}
-user output-unit-action
+date 31.12.2024 23:58:59
+user https://github.com/szapp/output-unit-action
 END
 objects 1
 END
 
 [% zCCSLib 0 0]
 \tNumOfItems=int:0
+[]
 `
 
-    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'ascii')
+    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString)
   })
 })
