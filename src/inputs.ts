@@ -5,9 +5,9 @@ import { trueCasePathSync } from 'true-case-path'
 
 export function loadInputs(): { workingDir: string; srcFile: string; outFile: string; filterComments: boolean } {
   const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '')
-  const relSrcFile = posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true })))
-  const relOutFile = posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true })))
-  const filterComments = core.getBooleanInput('filterComments') ?? false
+  const relSrcFile = posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true }) || 'Gothic.src'))
+  const relOutFile = posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true }) || 'OU.csl'))
+  const filterComments = core.getBooleanInput('filterComments')
 
   // Filtering comments is not yet implemented
   if (filterComments) {

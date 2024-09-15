@@ -26821,11 +26821,6 @@ const winRE = /[\\]/g;
 function normalizePath(filepath) {
     return filepath.replace(winRE, '/');
 }
-function stripPath(filepath, workingDir = '') {
-    const fullPath = normalizePath(filepath);
-    const relPath = fullPath.replace(workingDir, '');
-    return { fullPath, relPath };
-}
 
 // EXTERNAL MODULE: ./node_modules/true-case-path/index.js
 var true_case_path = __nccwpck_require__(6979);
@@ -26836,9 +26831,9 @@ var true_case_path = __nccwpck_require__(6979);
 
 function loadInputs() {
     const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '');
-    const relSrcFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true })));
-    const relOutFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true })));
-    const filterComments = core.getBooleanInput('filterComments') ?? false;
+    const relSrcFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true }) || 'Gothic.src'));
+    const relOutFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true }) || 'OU.csl'));
+    const filterComments = core.getBooleanInput('filterComments');
     // Filtering comments is not yet implemented
     if (filterComments) {
         throw new Error('Filtering comments is not yet implemented.');
@@ -27058,7 +27053,7 @@ async function run() {
         await parser.parse();
         // Warn about duplicate output units
         core.info(`Detected ${parser.warnings.length} duplicate output units.`);
-        parser.warnings.forEach((warning) => console.warn(warning));
+        parser.warnings.forEach((warning) => core.warning(warning));
         // Write CSL file
         core.info('Writing CSL file...');
         write(outFile, parser.ouList);

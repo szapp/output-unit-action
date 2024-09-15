@@ -20,7 +20,7 @@ export async function run(): Promise<void> {
 
     // Warn about duplicate output units
     core.info(`Detected ${parser.warnings.length} duplicate output units.`)
-    parser.warnings.forEach((warning) => console.warn(warning))
+    parser.warnings.forEach((warning) => core.warning(warning))
 
     // Write CSL file
     core.info('Writing CSL file...')
