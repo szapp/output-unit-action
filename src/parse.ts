@@ -73,7 +73,7 @@ export class Parser {
 
     console.log(`Reading ${relPath}`)
     const srcRootPath = posix.dirname(fullPath)
-    const input = fs.readFileSync(fullPath, 'utf-8')
+    const input = fs.readFileSync(fullPath, 'latin1')
     const lines = input.split(/\r?\n/).filter((line) => line.trim() !== '')
 
     // Iterate over the lines in the file
@@ -118,7 +118,7 @@ export class Parser {
 
     console.log(`Parsing ${relPath}`)
 
-    const input = fs.readFileSync(fullPath, 'utf-8')
+    const input = fs.readFileSync(fullPath, 'latin1')
     this.parseStr(input)
   }
 
