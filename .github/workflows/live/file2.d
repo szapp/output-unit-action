@@ -3,6 +3,6 @@
     AI_Output(
         hero,
         self,
-        "DIA_TEST_3"
+        "DIA_TEST_2"
     ); //This is an output unit in a comment block!
 */
