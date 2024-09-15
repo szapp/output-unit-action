@@ -26,7 +26,7 @@ export function loadInputs(): { workingDir: string; srcFile: string; outFile: st
     const { dir: outFileDir, base: outFileName } = posix.parse(relOutFile)
     outFile = normalizePath(trueCasePathSync(posix.join(workingDir, outFileDir)))
     outFile = posix.join(outFile, outFileName)
-    outFile = outFile.endsWith('.csl') ? outFile : outFile + '.csl'
+    outFile = outFile.endsWith('.csl') || outFile.endsWith('.CSL') ? outFile : outFile + '.csl'
   } catch {
     throw new Error('Path to output file is invalid.')
   }

@@ -83,7 +83,7 @@ describe('loadInputs', () => {
   it('throws error if output file path is invalid', () => {
     mockGetInput.mockImplementation((name: string) => {
       if (name === 'srcFile') return 'src/file.src'
-      if (name === 'outFile') return 'out/file'
+      if (name === 'outFile') return 'out/file.CSL'
       return ''
     })
     mockGetBooleanInput.mockReturnValue(false)

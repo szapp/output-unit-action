@@ -49,5 +49,5 @@ name=string:${key}.WAV
   formatString += '[]\n'
 
   // Write to disk
-  fs.writeFileSync(outFile, formatString)
+  fs.writeFileSync(outFile, formatString, 'ascii')
 }

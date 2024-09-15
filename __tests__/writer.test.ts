@@ -60,7 +60,7 @@ name=string:key2.WAV
 []
 `
 
-    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString)
+    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'ascii')
   })
 
   it('writes an empty list correctly', () => {
@@ -85,6 +85,6 @@ END
 []
 `
 
-    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString)
+    expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'ascii')
   })
 })

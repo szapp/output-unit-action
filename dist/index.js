@@ -26851,7 +26851,7 @@ function loadInputs() {
         const { dir: outFileDir, base: outFileName } = external_path_.posix.parse(relOutFile);
         outFile = normalizePath((0,true_case_path.trueCasePathSync)(external_path_.posix.join(workingDir, outFileDir)));
         outFile = external_path_.posix.join(outFile, outFileName);
-        outFile = outFile.endsWith('.csl') ? outFile : outFile + '.csl';
+        outFile = outFile.endsWith('.csl') || outFile.endsWith('.CSL') ? outFile : outFile + '.csl';
     }
     catch {
         throw new Error('Path to output file is invalid.');
@@ -27038,7 +27038,7 @@ name=string:${key}.WAV
     }
     formatString += '[]\n';
     // Write to disk
-    external_fs_default().writeFileSync(outFile, formatString);
+    external_fs_default().writeFileSync(outFile, formatString, 'ascii');
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
