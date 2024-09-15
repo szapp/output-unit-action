@@ -27029,8 +27029,14 @@ name=string:${key}.WAV
         index++;
     }
     formatString += '[]\n';
+    // Compare to current content of file skipping the first 10 lines (date in the header)
+    const currentContent = external_fs_default().existsSync(outFile) ? external_fs_default().readFileSync(outFile, 'latin1') : '';
+    const currentLines = currentContent.split('\n').slice(10).join('\n');
+    const newLines = formatString.split('\n').slice(10).join('\n');
+    const changed = currentLines !== newLines;
     // Write to disk
     external_fs_default().writeFileSync(outFile, formatString, 'latin1');
+    return changed;
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -27053,9 +27059,11 @@ async function run() {
         // Warn about duplicate output units
         core.info(`Detected ${parser.warnings.length} duplicate output units.`);
         parser.warnings.forEach((warning) => core.warning(warning));
-        // Write CSL file
+        // Write CSL file and check if it changed
         core.info('Writing CSL file...');
-        write(outFile, parser.ouList);
+        const changed = write(outFile, parser.ouList);
+        // Set output
+        core.setOutput('changed', changed);
     }
     catch (error) {
         const msg = error instanceof Error ? error.message : String(error);

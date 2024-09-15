@@ -15,6 +15,11 @@ inputs:
       Path to the output file to write the dialog units to
     required: false
 
+outputs:
+  changed:
+    description: >
+      Whether the output units changed
+
 runs:
   using: node20
   main: dist/index.js

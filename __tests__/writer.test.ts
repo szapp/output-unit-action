@@ -5,6 +5,8 @@ jest.mock('fs')
 
 describe('write', () => {
   const mockWriteFileSync = fs.writeFileSync as jest.MockedFunction<typeof fs.writeFileSync>
+  const mockExistsSync = fs.existsSync as jest.MockedFunction<typeof fs.existsSync>
+  const mockReadFileSync = fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -17,8 +19,6 @@ describe('write', () => {
       ['key1', 'value1'],
       ['key2', 'value2'],
     ])
-
-    write(outFile, ouList)
 
     const expectedFormatString = `ZenGin Archive
 ver 1
@@ -60,14 +60,18 @@ name=string:key2.WAV
 []
 `
 
+    mockExistsSync.mockReturnValue(true)
+    mockReadFileSync.mockReturnValue(expectedFormatString)
+
+    const result = write(outFile, ouList)
+
     expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'latin1')
+    expect(result).toBe(false)
   })
 
   it('writes an empty list correctly', () => {
     const outFile = 'output.csl'
     const ouList = new Map<string, string>()
-
-    write(outFile, ouList)
 
     const expectedFormatString = `ZenGin Archive
 ver 1
@@ -85,6 +89,12 @@ END
 []
 `
 
+    mockExistsSync.mockReturnValue(false)
+    mockReadFileSync.mockReturnValue('')
+
+    const result = write(outFile, ouList)
+
     expect(mockWriteFileSync).toHaveBeenCalledWith(outFile, expectedFormatString, 'latin1')
+    expect(result).toBe(true)
   })
 })

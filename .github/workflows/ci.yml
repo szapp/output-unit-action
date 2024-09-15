@@ -69,6 +69,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Test Local Action
+        id: ou
         uses: ./
         with:
           srcFile: .github/workflows/live/test.src
@@ -76,3 +77,7 @@ jobs:
 
       - name: Display output
         run: cat OU.csl
+
+      - name: Check action output
+        if: ${{ steps.ou.outputs.changed != 'true' }}
+        run: echo "Action output incorrect" && exit 1

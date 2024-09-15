@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-export function write(outFile: string, ouList: Map<string, string>): void {
+export function write(outFile: string, ouList: Map<string, string>): boolean {
   // Format current date into "DD.MM.YYYY HH:MM:SS"
   const date = new Date()
   const day = String(date.getDate()).padStart(2, '0')
@@ -48,6 +48,14 @@ name=string:${key}.WAV
 
   formatString += '[]\n'
 
+  // Compare to current content of file skipping the first 10 lines (date in the header)
+  const currentContent = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'latin1') : ''
+  const currentLines = currentContent.split('\n').slice(10).join('\n')
+  const newLines = formatString.split('\n').slice(10).join('\n')
+  const changed = currentLines !== newLines
+
   // Write to disk
   fs.writeFileSync(outFile, formatString, 'latin1')
+
+  return changed
 }
