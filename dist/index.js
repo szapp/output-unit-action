@@ -26833,11 +26833,6 @@ function loadInputs() {
     const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '');
     const relSrcFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true }) || 'Gothic.src'));
     const relOutFile = external_path_.posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true }) || 'OU.csl'));
-    const filterComments = core.getBooleanInput('filterComments');
-    // Filtering comments is not yet implemented
-    if (filterComments) {
-        throw new Error('Filtering comments is not yet implemented.');
-    }
     // Check if file exists and correct case
     let srcFile;
     try {
@@ -26856,7 +26851,7 @@ function loadInputs() {
     catch {
         throw new Error('Path to output file is invalid.');
     }
-    return { workingDir, srcFile, outFile, filterComments };
+    return { workingDir, srcFile, outFile };
 }
 
 // EXTERNAL MODULE: external "fs"
@@ -26876,7 +26871,6 @@ class Parser {
     filepath;
     workingDir;
     exists;
-    filterComments;
     fileList;
     warnings;
     ouList;
@@ -26886,13 +26880,12 @@ class Parser {
      * @param {string} filepath - The file path.
      * @param {string} [workingDir=''] - The working directory.
      */
-    constructor(filepath, workingDir = '', filterComments = false) {
+    constructor(filepath, workingDir = '') {
         this.filepath = normalizePath(filepath);
         this.workingDir = normalizePath(workingDir);
         if (this.workingDir.length > 0 && !this.workingDir.endsWith('/'))
             this.workingDir += '/';
         this.exists = external_fs_default().existsSync(this.filepath);
-        this.filterComments = filterComments;
         this.fileList = [];
         this.warnings = [];
         this.ouList = new Map();
@@ -26956,7 +26949,6 @@ class Parser {
      * Parses the specified file and collects symbol tables.
      *
      * @param filepath - The path of the file to parse.
-     * @param exclude - Indicates whether the file is not part of the patch.
      */
     parseD(filepath) {
         const { relPath } = this.stripPath(filepath);
@@ -27050,14 +27042,13 @@ async function run() {
     try {
         // Load inputs
         core.info('Loading inputs...');
-        const { workingDir, srcFile, outFile, filterComments } = loadInputs();
+        const { workingDir, srcFile, outFile } = loadInputs();
         core.info(`Working directory: ${workingDir}`);
         core.info(`Source file: ${srcFile}`);
         core.info(`Output file: ${outFile}`);
-        core.info(`Filter comments: ${filterComments}`);
         // Parse the source file
         core.info('Parsing scripts...');
-        const parser = new Parser(srcFile, workingDir, filterComments);
+        const parser = new Parser(srcFile, workingDir);
         await parser.parse();
         // Warn about duplicate output units
         core.info(`Detected ${parser.warnings.length} duplicate output units.`);

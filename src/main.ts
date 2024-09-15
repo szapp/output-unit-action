@@ -7,15 +7,14 @@ export async function run(): Promise<void> {
   try {
     // Load inputs
     core.info('Loading inputs...')
-    const { workingDir, srcFile, outFile, filterComments } = loadInputs()
+    const { workingDir, srcFile, outFile } = loadInputs()
     core.info(`Working directory: ${workingDir}`)
     core.info(`Source file: ${srcFile}`)
     core.info(`Output file: ${outFile}`)
-    core.info(`Filter comments: ${filterComments}`)
 
     // Parse the source file
     core.info('Parsing scripts...')
-    const parser = new Parser(srcFile, workingDir, filterComments)
+    const parser = new Parser(srcFile, workingDir)
     await parser.parse()
 
     // Warn about duplicate output units

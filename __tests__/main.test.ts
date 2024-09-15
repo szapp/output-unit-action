@@ -29,10 +29,9 @@ describe('run', () => {
       workingDir: '/path/to/workspace',
       srcFile: 'src/file.src',
       outFile: 'out/file.csl',
-      filterComments: false,
     })
     mockParserParse.mockResolvedValue(undefined)
-    const mockParserInstance = new Parser('src/file.src', '/path/to/workspace', false)
+    const mockParserInstance = new Parser('src/file.src', '/path/to/workspace')
     ;(mockParserInstance as any).warnings = ['Duplicate output unit: "Hello"']
     Parser.prototype.parse = mockParserParse
     ;(Parser.prototype as any).warnings = mockParserInstance.warnings
@@ -44,7 +43,6 @@ describe('run', () => {
     expect(mockCoreInfo).toHaveBeenCalledWith('Working directory: /path/to/workspace')
     expect(mockCoreInfo).toHaveBeenCalledWith('Source file: src/file.src')
     expect(mockCoreInfo).toHaveBeenCalledWith('Output file: out/file.csl')
-    expect(mockCoreInfo).toHaveBeenCalledWith('Filter comments: false')
     expect(mockCoreInfo).toHaveBeenCalledWith('Parsing scripts...')
     expect(mockCoreInfo).toHaveBeenCalledWith('Detected 1 duplicate output units.')
     expect(mockCoreWarning).toHaveBeenCalledWith('Duplicate output unit: "Hello"')

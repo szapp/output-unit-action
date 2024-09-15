@@ -13,7 +13,6 @@ export class Parser {
   public readonly filepath: string
   public readonly workingDir: string
   public readonly exists: boolean
-  public readonly filterComments: boolean
   public readonly fileList: string[]
   public readonly warnings: string[]
   public readonly ouList: Map<string, string>
@@ -24,12 +23,11 @@ export class Parser {
    * @param {string} filepath - The file path.
    * @param {string} [workingDir=''] - The working directory.
    */
-  constructor(filepath: string, workingDir: string = '', filterComments: boolean = false) {
+  constructor(filepath: string, workingDir: string = '') {
     this.filepath = normalizePath(filepath)
     this.workingDir = normalizePath(workingDir)
     if (this.workingDir.length > 0 && !this.workingDir.endsWith('/')) this.workingDir += '/'
     this.exists = fs.existsSync(this.filepath)
-    this.filterComments = filterComments
     this.fileList = []
     this.warnings = []
     this.ouList = new Map()
@@ -100,7 +98,6 @@ export class Parser {
    * Parses the specified file and collects symbol tables.
    *
    * @param filepath - The path of the file to parse.
-   * @param exclude - Indicates whether the file is not part of the patch.
    */
   protected parseD(filepath: string): void {
     const { relPath } = this.stripPath(filepath)

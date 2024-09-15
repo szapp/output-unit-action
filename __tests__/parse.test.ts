@@ -16,12 +16,11 @@ describe('Parser', () => {
 
   it('initializes correctly', () => {
     mockFsExistsSync.mockReturnValue(true)
-    const parser = new Parser('src/file.src', '/path/to/workspace', false)
+    const parser = new Parser('src/file.src', '/path/to/workspace')
 
     expect(parser.filepath).toBe('src/file.src')
     expect(parser.workingDir).toBe('/path/to/workspace/')
     expect(parser.exists).toBe(true)
-    expect(parser.filterComments).toBe(false)
     expect(parser.fileList).toEqual([])
     expect(parser.warnings).toEqual([])
     expect(parser.ouList.size).toBe(0)
@@ -35,7 +34,7 @@ describe('Parser', () => {
     })
     mockFsReadFileSync.mockReturnValue('file.d\nfile2.d\nfile.d\nfile3.d\nfile2.src\n')
 
-    const parser = new Parser('src/file.src', '/path/to/workspace', false)
+    const parser = new Parser('src/file.src', '/path/to/workspace')
     await parser.parse()
 
     expect(parser.fileList).toEqual(['src/file.d', 'src/file2.d'])
@@ -46,7 +45,7 @@ describe('Parser', () => {
     mockTrueCasePathSync.mockImplementation((path: string) => path)
     mockFsReadFileSync.mockReturnValue('file?.d')
 
-    const parser = new Parser('src/file.src', '/path/to/workspace', false)
+    const parser = new Parser('src/file.src', '/path/to/workspace')
 
     await expect(parser.parse()).rejects.toThrow('Wildcards are not yet implemented.')
   })
@@ -68,7 +67,7 @@ describe('Parser', () => {
     mockTrueCasePathSync.mockImplementation((path: string) => path)
     mockFsReadFileSync.mockReturnValue('AI_Output(hero, npc, "Hello"); //Greeting\nAI_Output(hero, npc, "Hello"); //Greeting')
 
-    const parser = new Parser('src/file.d', '/path/to/workspace', false)
+    const parser = new Parser('src/file.d', '/path/to/workspace')
     parser['parseD']('src/file.d')
 
     expect(parser.warnings).toContain('Duplicate output unit: "Hello"')
@@ -76,7 +75,7 @@ describe('Parser', () => {
 
   it('handles non-existent files gracefully', async () => {
     mockFsExistsSync.mockReturnValue(false)
-    const parser = new Parser('src/nonexistent.src', '/path/to/workspace', false)
+    const parser = new Parser('src/nonexistent.src', '/path/to/workspace')
 
     await parser.parse()
 

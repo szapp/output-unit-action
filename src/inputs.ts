@@ -3,16 +3,10 @@ import { posix } from 'path'
 import { normalizePath } from './utils.js'
 import { trueCasePathSync } from 'true-case-path'
 
-export function loadInputs(): { workingDir: string; srcFile: string; outFile: string; filterComments: boolean } {
+export function loadInputs(): { workingDir: string; srcFile: string; outFile: string } {
   const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '')
   const relSrcFile = posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true }) || 'Gothic.src'))
   const relOutFile = posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true }) || 'OU.csl'))
-  const filterComments = core.getBooleanInput('filterComments')
-
-  // Filtering comments is not yet implemented
-  if (filterComments) {
-    throw new Error('Filtering comments is not yet implemented.')
-  }
 
   // Check if file exists and correct case
   let srcFile: string
@@ -31,5 +25,5 @@ export function loadInputs(): { workingDir: string; srcFile: string; outFile: st
     throw new Error('Path to output file is invalid.')
   }
 
-  return { workingDir, srcFile, outFile, filterComments }
+  return { workingDir, srcFile, outFile }
 }

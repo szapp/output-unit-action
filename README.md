@@ -32,7 +32,7 @@ jobs:
         with:
           srcFile: path/to/Gothic.src # Adjust
           outFile: path/to/OU.csl # Adjust
-          filterComments: false
+
 
       # Continue with the file path/to/OU.csl, e.g.
       # - Commit it to the repository
@@ -48,7 +48,3 @@ jobs:
 - `outFile`:
   Path to output file (e.g. `path/to/OU.csl`).
   Required.
-
-- `filterComments`:
-  Whether to exclude `AI_Output` commands that are commented out.
-  Defaults to false.

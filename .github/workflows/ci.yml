@@ -73,7 +73,6 @@ jobs:
         with:
           srcFile: .github/workflows/live/test.src
           outFile: OU.csl
-          filterComments: false
 
       - name: Display output
         run: cat OU.csl
