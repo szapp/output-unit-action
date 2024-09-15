@@ -26932,7 +26932,7 @@ class Parser {
         }
         console.log(`Reading ${relPath}`);
         const srcRootPath = external_path_.posix.dirname(fullPath);
-        const input = external_fs_default().readFileSync(fullPath, 'ascii');
+        const input = external_fs_default().readFileSync(fullPath, 'utf-8');
         const lines = input.split(/\r?\n/).filter((line) => line.trim() !== '');
         // Iterate over the lines in the file
         while (lines.length > 0) {
@@ -26972,7 +26972,7 @@ class Parser {
             return;
         this.fileList.push(relPath);
         console.log(`Parsing ${relPath}`);
-        const input = external_fs_default().readFileSync(fullPath, 'ascii');
+        const input = external_fs_default().readFileSync(fullPath, 'utf-8');
         this.parseStr(input);
     }
     /**
@@ -27038,7 +27038,7 @@ name=string:${key}.WAV
     }
     formatString += '[]\n';
     // Write to disk
-    external_fs_default().writeFileSync(outFile, formatString, 'ascii');
+    external_fs_default().writeFileSync(outFile, formatString);
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts

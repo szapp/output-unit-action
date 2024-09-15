@@ -4,5 +4,5 @@ func void DIA_Test_Info() {
         hero,
         self,
         "DIA_TEST_1"
-    ); //This is a second output unit!
+    ); //Vykonal si všechny moje zadání.
 };
