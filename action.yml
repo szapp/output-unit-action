@@ -1,0 +1,25 @@
+name: Output Unit Action
+description: Create dialog output units from Daedalus scripts
+
+branding:
+  icon: message-circle
+  color: purple
+
+inputs:
+  srcFile:
+    description: >
+      Path to the Daedalus source file to parse
+    required: true
+  outFile:
+    description: >
+      Path to the output file to write the dialog units to
+    required: false
+  filterComments:
+    description: >
+      Whether to filter out comments from the input
+    required: false
+    default: true
+
+runs:
+  using: node20
+  main: dist/index.js

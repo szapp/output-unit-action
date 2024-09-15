@@ -1,0 +1,106 @@
+{
+  "name": "output-unit-action",
+  "description": "Create dialog output units from Daedalus scripts",
+  "version": "0.1.0",
+  "author": "Sören Zapp",
+  "homepage": "https://github.com/szapp/output-unit-action#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szapp/output-unit-action.git"
+  },
+  "bugs": {
+    "url": "https://github.com/szapp/output-unit-action/issues"
+  },
+  "keywords": [
+    "ci",
+    "gothic",
+    "gothic1",
+    "gothic2",
+    "output-units",
+    "ou",
+    "daedalus",
+    "github-actions"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "bundle": "npm run format:write && npm run package",
+    "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
+    "format:check": "prettier --check src/*.ts",
+    "format:write": "prettier --write src/*.ts",
+    "lint": "eslint src/*.ts",
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "test": "jest",
+    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+  },
+  "license": "MIT",
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "verbose": true,
+    "clearMocks": true,
+    "resetMocks": true,
+    "restoreMocks": true,
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true,
+          "tsconfig": "./__tests__/tsconfig.json"
+        }
+      ]
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "./src/*.ts"
+    ]
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/io": "^1.1.3",
+    "glob": "^11.0.0",
+    "humanize-duration": "^3.32.1",
+    "true-case-path": "^2.2.1"
+  },
+  "devDependencies": {
+    "@types/humanize-duration": "^3.27.4",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^22.5.5",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "jest": "^29.7.0",
+    "make-coverage-badge": "^1.2.0",
+    "prettier": "^3.3.3",
+    "prettier-eslint": "^16.3.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.5.4"
+  }
+}
