@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { write } from '../src/writer.ts'
+import { write } from '../src/writer'
 
 jest.mock('fs')
 

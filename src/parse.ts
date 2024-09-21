@@ -1,5 +1,5 @@
 import { posix } from 'path'
-import { normalizePath } from './utils.js'
+import { normalizePath } from './utils'
 import { trueCasePathSync } from 'true-case-path'
 import fs from 'fs'
 

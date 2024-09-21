@@ -25064,7 +25064,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loadInputs = loadInputs;
 const core = __importStar(__nccwpck_require__(2186));
 const path_1 = __nccwpck_require__(1017);
-const utils_js_1 = __nccwpck_require__(1314);
+const utils_1 = __nccwpck_require__(1314);
 const true_case_path_1 = __nccwpck_require__(6979);
 function loadInputs() {
     const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '');
@@ -25073,7 +25073,7 @@ function loadInputs() {
     // Check if file exists and correct case
     let srcFile;
     try {
-        srcFile = (0, utils_js_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(path_1.posix.join(workingDir, relSrcFile)));
+        srcFile = (0, utils_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(path_1.posix.join(workingDir, relSrcFile)));
     }
     catch {
         throw new Error('Source file not found.');
@@ -25081,7 +25081,7 @@ function loadInputs() {
     let outFile;
     try {
         const { dir: outFileDir, base: outFileName } = path_1.posix.parse(relOutFile);
-        outFile = (0, utils_js_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(path_1.posix.join(workingDir, outFileDir)));
+        outFile = (0, utils_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(path_1.posix.join(workingDir, outFileDir)));
         outFile = path_1.posix.join(outFile, outFileName);
         outFile = outFile.endsWith('.csl') || outFile.endsWith('.CSL') ? outFile : outFile + '.csl';
     }
@@ -25125,27 +25125,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
-const inputs_js_1 = __nccwpck_require__(7063);
-const parse_js_1 = __nccwpck_require__(6089);
-const writer_js_1 = __nccwpck_require__(5323);
+const inputs_1 = __nccwpck_require__(7063);
+const parse_1 = __nccwpck_require__(6089);
+const writer_1 = __nccwpck_require__(5323);
 async function run() {
     try {
         // Load inputs
         core.info('Loading inputs...');
-        const { workingDir, srcFile, outFile } = (0, inputs_js_1.loadInputs)();
+        const { workingDir, srcFile, outFile } = (0, inputs_1.loadInputs)();
         core.info(`Working directory: ${workingDir}`);
         core.info(`Source file: ${srcFile}`);
         core.info(`Output file: ${outFile}`);
         // Parse the source file
         core.info('Parsing scripts...');
-        const parser = new parse_js_1.Parser(srcFile, workingDir);
+        const parser = new parse_1.Parser(srcFile, workingDir);
         await parser.parse();
         // Warn about duplicate output units
         core.info(`Detected ${parser.warnings.length} duplicate output units.`);
         parser.warnings.forEach((warning) => core.warning(warning));
         // Write CSL file and check if it changed
         core.info('Writing CSL file...');
-        const changed = (0, writer_js_1.write)(outFile, parser.ouList);
+        const changed = (0, writer_1.write)(outFile, parser.ouList);
         // Set output
         core.setOutput('changed', changed);
     }
@@ -25169,7 +25169,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Parser = void 0;
 const path_1 = __nccwpck_require__(1017);
-const utils_js_1 = __nccwpck_require__(1314);
+const utils_1 = __nccwpck_require__(1314);
 const true_case_path_1 = __nccwpck_require__(6979);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const wildcards = /\*|\?/;
@@ -25191,8 +25191,8 @@ class Parser {
      * @param {string} [workingDir=''] - The working directory.
      */
     constructor(filepath, workingDir = '') {
-        this.filepath = (0, utils_js_1.normalizePath)(filepath);
-        this.workingDir = (0, utils_js_1.normalizePath)(workingDir);
+        this.filepath = (0, utils_1.normalizePath)(filepath);
+        this.workingDir = (0, utils_1.normalizePath)(workingDir);
         if (this.workingDir.length > 0 && !this.workingDir.endsWith('/'))
             this.workingDir += '/';
         this.exists = fs_1.default.existsSync(this.filepath);
@@ -25207,7 +25207,7 @@ class Parser {
      * @returns An object containing the full path and relative path.
      */
     stripPath(filepath) {
-        const fullPath = (0, utils_js_1.normalizePath)(filepath);
+        const fullPath = (0, utils_1.normalizePath)(filepath);
         const relPath = fullPath.replace(this.workingDir, '');
         return { fullPath, relPath };
     }
@@ -25228,7 +25228,7 @@ class Parser {
         // Check if file exists and correct case
         let fullPath;
         try {
-            fullPath = (0, utils_js_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(relPath));
+            fullPath = (0, utils_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(relPath));
         }
         catch {
             return;
@@ -25240,7 +25240,7 @@ class Parser {
         // Iterate over the lines in the file
         while (lines.length > 0) {
             const line = lines.shift().trim();
-            const subfile = (0, utils_js_1.normalizePath)(line);
+            const subfile = (0, utils_1.normalizePath)(line);
             const fullPath = path_1.posix.join(srcRootPath, subfile);
             if (wildcards.test(line))
                 throw new Error('Wildcards are not yet implemented.');
@@ -25265,7 +25265,7 @@ class Parser {
         // Check if file exists and correct case
         let fullPath;
         try {
-            fullPath = (0, utils_js_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(relPath));
+            fullPath = (0, utils_1.normalizePath)((0, true_case_path_1.trueCasePathSync)(relPath));
         }
         catch {
             return;
@@ -27274,8 +27274,8 @@ var __webpack_exports__ = {};
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const main_js_1 = __nccwpck_require__(399);
-(0, main_js_1.run)();
+const main_1 = __nccwpck_require__(399);
+(0, main_1.run)();
 
 })();
 

@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { posix } from 'path'
-import { normalizePath } from './utils.js'
+import { normalizePath } from './utils'
 import { trueCasePathSync } from 'true-case-path'
 
 export function loadInputs(): { workingDir: string; srcFile: string; outFile: string } {

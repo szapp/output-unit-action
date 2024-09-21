@@ -1,4 +1,4 @@
-import { Parser } from '../src/parse.ts'
+import { Parser } from '../src/parse'
 import fs from 'fs'
 import { trueCasePathSync } from 'true-case-path'
 

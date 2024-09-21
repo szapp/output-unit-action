@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { loadInputs } from '../src/inputs.ts'
+import { loadInputs } from '../src/inputs'
 import { trueCasePathSync } from 'true-case-path'
 
 jest.mock('@actions/core')

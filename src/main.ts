@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import { loadInputs } from './inputs.js'
-import { Parser } from './parse.js'
-import { write } from './writer.js'
+import { loadInputs } from './inputs'
+import { Parser } from './parse'
+import { write } from './writer'
 
 export async function run(): Promise<void> {
   try {

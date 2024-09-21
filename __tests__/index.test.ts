@@ -1,4 +1,4 @@
-import * as main from '../src/main.ts'
+import * as main from '../src/main'
 
 let runMock: jest.SpiedFunction<typeof main.run>
 

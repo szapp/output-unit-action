@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as core from '@actions/core'
-import { run } from '../src/main.ts'
-import { loadInputs } from '../src/inputs.ts'
-import { Parser } from '../src/parse.ts'
-import { write } from '../src/writer.ts'
+import { run } from '../src/main'
+import { loadInputs } from '../src/inputs'
+import { Parser } from '../src/parse'
+import { write } from '../src/writer'
 
 jest.mock('@actions/core')
 jest.mock('../src/inputs.ts')

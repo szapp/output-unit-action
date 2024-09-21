@@ -1,4 +1,4 @@
-import { normalizePath } from '../src/utils.ts'
+import { normalizePath } from '../src/utils'
 
 describe('normalizePath', () => {
   it('should replace backslashes with forward slashes', () => {
