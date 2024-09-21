@@ -1,7 +1,7 @@
 {
   "name": "output-unit-action",
   "description": "Create dialog output units from Daedalus scripts",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "author": "Sören Zapp",
   "homepage": "https://github.com/szapp/output-unit-action#readme",
   "repository": {
@@ -21,7 +21,6 @@
     "daedalus",
     "github-actions"
   ],
-  "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },
