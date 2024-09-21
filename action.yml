@@ -7,18 +7,15 @@ branding:
 
 inputs:
   srcFile:
-    description: >
-      Path to the Daedalus source file to parse
+    description: Path to the Daedalus source file to parse
     required: true
   outFile:
-    description: >
-      Path to the output file to write the dialog units to
+    description: Path to the output file to write the dialog units to
     required: false
 
 outputs:
   changed:
-    description: >
-      Whether the output units changed
+    description: Whether the output units changed
 
 runs:
   using: node20
