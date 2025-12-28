@@ -36,7 +36,7 @@ jobs:
     name: Generate output units from scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Generate output units
         id: ou
         uses: szapp/output-unit-action@v1
@@ -57,7 +57,7 @@ jobs:
       # Optional: If manually triggered, provide as artifact for download
       - name: Upload file as artifact
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Output Units
           path: path/to/OU.csl # Adjust <--

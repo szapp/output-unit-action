@@ -2,7 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "orta.vscode-jest",
-        "esbenp.prettier-vscode",
+        "prettier.prettier-vscode",
         "yoavbls.pretty-ts-errors",
     ]
 }
