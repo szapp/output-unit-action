@@ -1,7 +1,7 @@
-import { posix } from 'path'
-import { normalizePath } from './utils'
+import fs from 'node:fs'
+import { posix } from 'node:path'
 import { trueCasePathSync } from 'true-case-path'
-import fs from 'fs'
+import { normalizePath } from './utils.js'
 
 const wildcards: RegExp = /\*|\?/
 const ouCommand: RegExp = /AI_Output\s*\(\s*[\w\d]+\s*,\s*[\w\d]+\s*,\s*"([^"\n]+)"\s*\)\s*;\s*\/\/([^\r\n]+)/gi
@@ -76,7 +76,8 @@ export class Parser {
 
     // Iterate over the lines in the file
     while (lines.length > 0) {
-      const line = lines.shift()!.trim()
+      /* istanbul ignore next */
+      const line = lines.shift()?.trim() ?? ''
       const subfile = normalizePath(line)
       const fullPath = posix.join(srcRootPath, subfile)
 

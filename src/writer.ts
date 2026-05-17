@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 
 export function write(outFile: string, ouList: Map<string, string>): boolean {
   // Format current date into "DD.MM.YYYY HH:MM:SS"

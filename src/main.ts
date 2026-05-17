@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import { loadInputs } from './inputs'
-import { Parser } from './parse'
-import { write } from './writer'
+import { loadInputs } from './inputs.js'
+import { Parser } from './parse.js'
+import { write } from './writer.js'
 
 export async function run(): Promise<void> {
   try {
@@ -19,7 +19,9 @@ export async function run(): Promise<void> {
 
     // Warn about duplicate output units
     core.info(`Detected ${parser.warnings.length} duplicate output units.`)
-    parser.warnings.forEach((warning) => core.warning(warning))
+    parser.warnings.forEach((warning) => {
+      core.warning(warning)
+    })
 
     // Write CSL file and check if it changed
     core.info('Writing CSL file...')

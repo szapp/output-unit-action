@@ -1,20 +1,18 @@
-import { Parser } from '../src/parse'
-import fs from 'fs'
-import { trueCasePathSync } from 'true-case-path'
+import fs from 'node:fs'
+import trueCase from 'true-case-path'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { Parser } from './parse.js'
 
-jest.mock('fs')
-jest.mock('true-case-path')
+const mockTrueCasePathSync = vi.spyOn(trueCase, 'trueCasePathSync')
+const mockFsExistsSync = vi.spyOn(fs, 'existsSync')
+const mockFsReadFileSync = vi.spyOn(fs, 'readFileSync')
 
 describe('Parser', () => {
-  const mockFsExistsSync = fs.existsSync as jest.MockedFunction<typeof fs.existsSync>
-  const mockFsReadFileSync = fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>
-  const mockTrueCasePathSync = trueCasePathSync as jest.MockedFunction<typeof trueCasePathSync>
-
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
-  it('initializes correctly', () => {
+  test('initializes correctly', () => {
     mockFsExistsSync.mockReturnValue(true)
     const parser = new Parser('src/file.src', '/path/to/workspace')
 
@@ -26,7 +24,7 @@ describe('Parser', () => {
     expect(parser.ouList.size).toBe(0)
   })
 
-  it('parses source file correctly', async () => {
+  test('parses source file correctly', async () => {
     mockFsExistsSync.mockReturnValue(true)
     mockTrueCasePathSync.mockImplementation((path: string) => {
       if (path === 'src/file2.src' || path === 'src/file3.d') throw new Error('File not found')
@@ -40,7 +38,7 @@ describe('Parser', () => {
     expect(parser.fileList).toEqual(['src/file.d', 'src/file2.d'])
   })
 
-  it('throws error on wildcards in file path', async () => {
+  test('throws error on wildcards in file path', async () => {
     mockFsExistsSync.mockReturnValue(true)
     mockTrueCasePathSync.mockImplementation((path: string) => path)
     mockFsReadFileSync.mockReturnValue('file?.d')
@@ -50,30 +48,32 @@ describe('Parser', () => {
     await expect(parser.parse()).rejects.toThrow('Wildcards are not yet implemented.')
   })
 
-  it('parses .d files correctly', () => {
+  test('parses .d files correctly', () => {
     mockFsExistsSync.mockReturnValue(true)
     mockTrueCasePathSync.mockImplementation((path: string) => path)
     mockFsReadFileSync.mockReturnValue('AI_Output(hero, npc, "Hello"); //Greeting')
 
     const parser = new Parser('src/file.d')
+    // biome-ignore lint/complexity/useLiteralKeys: This key is private
     parser['parseD']('src/file.d')
 
     expect(parser.ouList.size).toBe(1)
     expect(parser.ouList.get('Hello')).toBe('Greeting')
   })
 
-  it('handles duplicate output units', () => {
+  test('handles duplicate output units', () => {
     mockFsExistsSync.mockReturnValue(true)
     mockTrueCasePathSync.mockImplementation((path: string) => path)
     mockFsReadFileSync.mockReturnValue('AI_Output(hero, npc, "Hello"); //Greeting\nAI_Output(hero, npc, "Hello"); //Greeting')
 
     const parser = new Parser('src/file.d', '/path/to/workspace')
+    // biome-ignore lint/complexity/useLiteralKeys: This key is private
     parser['parseD']('src/file.d')
 
     expect(parser.warnings).toContain('Duplicate output unit: "Hello"')
   })
 
-  it('handles non-existent files gracefully', async () => {
+  test('handles non-existent files gracefully', async () => {
     mockFsExistsSync.mockReturnValue(false)
     const parser = new Parser('src/nonexistent.src', '/path/to/workspace')
 

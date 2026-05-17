@@ -1,21 +1,25 @@
 import * as core from '@actions/core'
-import { loadInputs } from '../src/inputs'
-import { trueCasePathSync } from 'true-case-path'
+import trueCase from 'true-case-path'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { loadInputs } from './inputs.js'
 
-jest.mock('@actions/core')
-jest.mock('true-case-path')
+vi.mock(import('@actions/core'), async (importOriginal) => {
+  const originalModule = await importOriginal()
+  return {
+    ...originalModule,
+  }
+})
+const mockGetInput = vi.spyOn(core, 'getInput')
+const mockToPosixPath = vi.spyOn(core, 'toPosixPath')
+const mockTrueCasePathSync = vi.spyOn(trueCase, 'trueCasePathSync')
 
 describe('loadInputs', () => {
-  const mockGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>
-  const mockToPosixPath = core.toPosixPath as jest.MockedFunction<typeof core.toPosixPath>
-  const mockTrueCasePathSync = trueCasePathSync as jest.MockedFunction<typeof trueCasePathSync>
-
   beforeEach(() => {
-    jest.resetAllMocks()
-    jest.replaceProperty(process, 'env', { GITHUB_WORKSPACE: '/path/to/workspace' })
+    vi.resetAllMocks()
+    vi.stubEnv('GITHUB_WORKSPACE', '/path/to/workspace')
   })
 
-  it('loads inputs correctly', () => {
+  test('loads inputs correctly', () => {
     mockGetInput.mockImplementation((name: string) => {
       if (name === 'srcFile') return 'src/file.src'
       if (name === 'outFile') return 'out/file'
@@ -33,8 +37,8 @@ describe('loadInputs', () => {
     })
   })
 
-  it('fills in missing input values', () => {
-    jest.replaceProperty(process, 'env', { GITHUB_WORKSPACE: undefined })
+  test('fills in missing input values', () => {
+    vi.stubEnv('GITHUB_WORKSPACE', undefined)
     mockGetInput.mockReturnValue('')
     mockToPosixPath.mockImplementation((path: string) => path)
     mockTrueCasePathSync.mockImplementation((path: string) => path)
@@ -48,7 +52,7 @@ describe('loadInputs', () => {
     })
   })
 
-  it('throws error if source file is not found', () => {
+  test('throws error if source file is not found', () => {
     mockGetInput.mockImplementation((name: string) => {
       if (name === 'srcFile') return 'src/file.src'
       return ''
@@ -61,7 +65,7 @@ describe('loadInputs', () => {
     expect(() => loadInputs()).toThrow('Source file not found.')
   })
 
-  it('throws error if output file path is invalid', () => {
+  test('throws error if output file path is invalid', () => {
     mockGetInput.mockImplementation((name: string) => {
       if (name === 'srcFile') return 'src/file.src'
       if (name === 'outFile') return 'out/file.CSL'

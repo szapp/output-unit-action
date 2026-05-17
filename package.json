@@ -3,6 +3,7 @@
   "description": "Create dialog output units from Daedalus scripts",
   "version": "1.0.1",
   "author": "Sören Zapp",
+  "license": "MIT",
   "homepage": "https://github.com/szapp/output-unit-action#readme",
   "repository": {
     "type": "git",
@@ -24,84 +25,37 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
-    "bundle": "npm run format:write && npm run package",
+    "build": "tsc --noEmit",
+    "bundle": "npm run check && npm run package",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
-    "format:check": "prettier --check src/*.ts",
-    "format:write": "prettier --write src/*.ts",
-    "lint": "eslint src/*.ts",
+    "format": "biome format --write",
+    "lint": "biome lint --write",
+    "check": "biome check --write",
+    "ci": "biome ci",
     "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
-    "test": "jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
-  },
-  "license": "MIT",
-  "jest": {
-    "preset": "ts-jest/presets/default",
-    "verbose": true,
-    "clearMocks": true,
-    "resetMocks": true,
-    "restoreMocks": true,
-    "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "testMatch": [
-      "**/*.test.ts"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dist/"
-    ],
-    "transform": {
-      "^.+\\.ts$": [
-        "ts-jest",
-        {
-          "useESM": false,
-          "tsconfig": "./__tests__/tsconfig.json"
-        }
-      ]
-    },
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "coverageReporters": [
-      "json-summary",
-      "text",
-      "lcov"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "./src/*.ts"
-    ]
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "all": "npm run check && npm run test && npm run coverage && npm run package"
   },
   "volta": {
-    "node": "24.12.0"
+    "node": "24.15.0"
   },
   "dependencies": {
-    "@actions/core": "^2.0.1",
+    "@actions/core": "^3.0.1",
     "true-case-path": "^2.2.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.2",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.50.1",
-    "@typescript-eslint/parser": "^8.50.1",
+    "@biomejs/biome": "^2.4.15",
+    "@types/node": "^25.8.0",
     "@vercel/ncc": "^0.38.4",
-    "eslint": "^9.39.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jest": "^29.11.0",
-    "globals": "^16.5.0",
-    "jest": "^30.2.0",
+    "@vitest/coverage-istanbul": "^4.1.6",
     "make-coverage-badge": "^1.2.0",
-    "prettier": "^3.7.4",
-    "prettier-eslint": "^16.4.2",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
   }
 }

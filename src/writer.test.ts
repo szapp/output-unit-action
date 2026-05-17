@@ -1,19 +1,20 @@
-import fs from 'fs'
-import { write } from '../src/writer'
+import fs from 'node:fs'
+import { beforeEach, describe, expect, type MockedFunction, test, vi } from 'vitest'
+import { write } from './writer.js'
 
-jest.mock('fs')
+vi.mock('fs')
 
 describe('write', () => {
-  const mockWriteFileSync = fs.writeFileSync as jest.MockedFunction<typeof fs.writeFileSync>
-  const mockExistsSync = fs.existsSync as jest.MockedFunction<typeof fs.existsSync>
-  const mockReadFileSync = fs.readFileSync as jest.MockedFunction<typeof fs.readFileSync>
+  const mockWriteFileSync = fs.writeFileSync as MockedFunction<typeof fs.writeFileSync>
+  const mockExistsSync = fs.existsSync as MockedFunction<typeof fs.existsSync>
+  const mockReadFileSync = fs.readFileSync as MockedFunction<typeof fs.readFileSync>
 
   beforeEach(() => {
-    jest.resetAllMocks()
-    jest.useFakeTimers().setSystemTime(new Date('2024-12-31 23:58:59'))
+    vi.resetAllMocks()
+    vi.useFakeTimers().setSystemTime(new Date('2024-12-31 23:58:59'))
   })
 
-  it('writes the correct format to the output file', () => {
+  test('writes the correct format to the output file', () => {
     const outFile = 'output.csl'
     const ouList = new Map<string, string>([
       ['key1', 'value1'],
@@ -69,7 +70,7 @@ name=string:key2.WAV
     expect(result).toBe(false)
   })
 
-  it('writes an empty list correctly', () => {
+  test('writes an empty list correctly', () => {
     const outFile = 'output.csl'
     const ouList = new Map<string, string>()
 

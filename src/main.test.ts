@@ -1,30 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as core from '@actions/core'
-import { run } from '../src/main'
-import { loadInputs } from '../src/inputs'
-import { Parser } from '../src/parse'
-import { write } from '../src/writer'
+import { beforeEach, describe, expect, type MockedFunction, test, vi } from 'vitest'
+import { loadInputs } from './inputs.js'
+import { run } from './main.js'
+import { Parser } from './parse.js'
+import { write } from './writer.js'
 
-jest.mock('@actions/core')
-jest.mock('../src/inputs.ts')
-jest.mock('../src/parse.ts')
-jest.mock('../src/writer.ts')
+vi.mock('@actions/core')
+vi.mock('../src/inputs.ts')
+vi.mock('../src/parse.ts')
+vi.mock('../src/writer.ts')
 
 describe('run', () => {
-  const mockLoadInputs = loadInputs as jest.MockedFunction<typeof loadInputs>
-  const mockParserParse = jest.fn()
-  const mockWrite = write as jest.MockedFunction<typeof write>
-  const mockCoreInfo = core.info as jest.MockedFunction<typeof core.info>
-  const mockCoreWarning = core.warning as jest.MockedFunction<typeof core.warning>
-  const mockCoreSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>
+  const mockLoadInputs = loadInputs as MockedFunction<typeof loadInputs>
+  const mockParserParse = vi.fn()
+  const mockWrite = write as MockedFunction<typeof write>
+  const mockCoreInfo = core.info as MockedFunction<typeof core.info>
+  const mockCoreWarning = core.warning as MockedFunction<typeof core.warning>
+  const mockCoreSetFailed = core.setFailed as MockedFunction<typeof core.setFailed>
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
     Parser.prototype.parse = mockParserParse
   })
 
-  it('runs successfully with valid inputs', async () => {
+  test('runs successfully with valid inputs', async () => {
     mockLoadInputs.mockReturnValue({
       workingDir: '/path/to/workspace',
       srcFile: 'src/file.src',
@@ -32,9 +33,12 @@ describe('run', () => {
     })
     mockParserParse.mockResolvedValue(undefined)
     const mockParserInstance = new Parser('src/file.src', '/path/to/workspace')
+    // biome-ignore lint/suspicious/noExplicitAny: Workaround to gain access
     ;(mockParserInstance as any).warnings = ['Duplicate output unit: "Hello"']
     Parser.prototype.parse = mockParserParse
+    // biome-ignore lint/suspicious/noExplicitAny: Workaround to gain access
     ;(Parser.prototype as any).warnings = mockParserInstance.warnings
+    // biome-ignore lint/suspicious/noExplicitAny: Workaround to gain access
     ;(Parser.prototype as any).ouList = new Map([['Hello', 'Greeting']])
 
     await run()
@@ -50,7 +54,7 @@ describe('run', () => {
     expect(mockWrite).toHaveBeenCalledWith('out/file.csl', new Map([['Hello', 'Greeting']]))
   })
 
-  it('handles errors gracefully', async () => {
+  test('handles errors gracefully', async () => {
     const errorMessage = 'An error occurred'
     mockLoadInputs.mockImplementation(() => {
       throw new Error(errorMessage)
@@ -61,7 +65,7 @@ describe('run', () => {
     expect(mockCoreSetFailed).toHaveBeenCalledWith(errorMessage)
   })
 
-  it('handles non-errors gracefully', async () => {
+  test('handles non-errors gracefully', async () => {
     const errorMessage = 'An error occurred'
     mockLoadInputs.mockImplementation(() => {
       throw errorMessage

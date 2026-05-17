@@ -1,10 +1,10 @@
+import { posix } from 'node:path'
 import * as core from '@actions/core'
-import { posix } from 'path'
-import { normalizePath } from './utils'
 import { trueCasePathSync } from 'true-case-path'
+import { normalizePath } from './utils.js'
 
 export function loadInputs(): { workingDir: string; srcFile: string; outFile: string } {
-  const workingDir = core.toPosixPath(process.env['GITHUB_WORKSPACE'] ?? '')
+  const workingDir = core.toPosixPath(process.env.GITHUB_WORKSPACE ?? '')
   const relSrcFile = posix.normalize(core.toPosixPath(core.getInput('srcFile', { required: true }) || 'Gothic.src'))
   const relOutFile = posix.normalize(core.toPosixPath(core.getInput('outFile', { required: true }) || 'OU.csl'))
 
@@ -20,7 +20,7 @@ export function loadInputs(): { workingDir: string; srcFile: string; outFile: st
     const { dir: outFileDir, base: outFileName } = posix.parse(relOutFile)
     outFile = normalizePath(trueCasePathSync(posix.join(workingDir, outFileDir)))
     outFile = posix.join(outFile, outFileName)
-    outFile = outFile.endsWith('.csl') || outFile.endsWith('.CSL') ? outFile : outFile + '.csl'
+    outFile = outFile.endsWith('.csl') || outFile.endsWith('.CSL') ? outFile : `${outFile}.csl`
   } catch {
     throw new Error('Path to output file is invalid.')
   }
