@@ -8,9 +8,9 @@ import { Parser } from './parse.js'
 import { write } from './writer.js'
 
 vi.mock('@actions/core')
-vi.mock('../src/inputs.ts')
-vi.mock('../src/parse.ts')
-vi.mock('../src/writer.ts')
+vi.mock('./inputs.ts')
+vi.mock('./parse.ts')
+vi.mock('./writer.ts')
 
 describe('run', () => {
   const mockLoadInputs = loadInputs as MockedFunction<typeof loadInputs>
