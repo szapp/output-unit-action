@@ -56,6 +56,6 @@
     "@vitest/coverage-istanbul": "^4.1.6",
     "make-coverage-badge": "^1.2.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.11"
   }
 }
